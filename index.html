@@ -108,8 +108,7 @@
             </div>
         </div>
     </div>
-
-    <!-- Подключаем данные -->
+       <!-- Подключаем данные -->
     <script src="data.js"></script>
     <script>
         const select = document.getElementById('issueSelect');
@@ -132,13 +131,38 @@
                 document.getElementById('serviceValue').textContent = data.service;
                 document.getElementById('contactValue').textContent = data.contact;
                 
-                // Делаем ссылку кликабельной
+                // Обработка нескольких ссылок
                 const urlContainer = document.getElementById('urlValue');
-                urlContainer.innerHTML = `<a href="${data.url}" target="_blank">${data.url}</a>`;
+                
+                // Разбиваем строку со ссылками по переносу строки \n
+                const linksArray = data.url.split('\n');
+                
+                // Превращаем каждую ссылку в HTML-тег <a> и объединяем обратно через тег <br>
+                urlContainer.innerHTML = linksArray
+                    .map(url => {
+                        const trimmedUrl = url.trim(); // Убираем случайные пробелы
+                        if (!trimmedUrl) return '';    // Игнорируем пустые строки
+                        return `<a href="${trimmedUrl}" target="_blank">${trimmedUrl}</a>`;
+                    })
+                    .filter(html => html !== '')       // Убираем пустые элементы
+                    .join('<br>');                     // Переносим каждую ссылку на новую строку
 
                 resultBox.style.display = 'block';
             }
         }
     </script>
+</body>
+    <body>
+
+    <!-- Этот блок будет ровно по центру страницы -->
+    <div class="content-box">
+        <h1>Уровни срочности заявок:</h1>
+        <p>Если уровень срочности АВАРИЙНАЯ (Угроза остановки потока, оборудованию или людям) - СТРОГО звонок дежурному инженеру, затем оповещение в группе «Эксплуатация Электросталь». Не письмом и не «на потом».</p>
+<p>---</p>
+<p>Если уровень срочности СРОЧНАЯ (Мешает работе, но это не авария) - Через ответственного на складе — он ставит приоритет.</p>
+<p>---</p>
+<p>Если уровень срочности ТЕКУЩАЯ (Плановое, терпит) - Через ответственного, в общем порядке.</p>
+    </div>
+
 </body>
 </html>
